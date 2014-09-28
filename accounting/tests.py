@@ -13,6 +13,9 @@ from tools import PolicyAccounting
 Test Suite for PolicyAccounting
 #######################################################
 """
+######
+#TODO# Consider using floating-point numbers to get accurate change for amount_due (currently relies on truncation)
+######
 
 class TestBillingSchedules(unittest.TestCase):
 
@@ -24,7 +27,7 @@ class TestBillingSchedules(unittest.TestCase):
         db.session.add(cls.test_insured)
         db.session.commit()
 
-        cls.policy = Policy('Test Policy', date(2015, 1, 1), 1200)
+        cls.policy = Policy('Test Policy', date(2015, 1, 1), 1300)
         db.session.add(cls.policy)
         cls.policy.named_insured = cls.test_insured.id
         cls.policy.agent = cls.test_agent.id
@@ -53,6 +56,18 @@ class TestBillingSchedules(unittest.TestCase):
         pa = PolicyAccounting(self.policy.id)
         self.assertEquals(len(self.policy.invoices), 1)
         self.assertEquals(self.policy.invoices[0].amount_due, self.policy.annual_premium)
+
+    def test_monthly_billing_schedule(self):
+        self.policy.billing_schedule = "Monthly"
+        #No invoices currently exist
+        self.assertFalse(self.policy.invoices)
+        #Invoices should be made when the class is initiated
+        pa = PolicyAccounting(self.policy.id)
+        #Monthly billing should have 12 invoices created
+        self.assertEquals(len(self.policy.invoices),12)
+        #Each invoice.amount_due should be equal to a twelfth of the annual_premium
+        self.assertItemsEqual( [ inv.amount_due for inv in self.policy.invoices ],
+                               [ self.policy.annual_premium/12 ] * 12  )
 
 
 class TestReturnAccountBalance(unittest.TestCase):
@@ -104,7 +119,12 @@ class TestReturnAccountBalance(unittest.TestCase):
         invoices = Invoice.query.filter_by(policy_id=self.policy.id)\
                                 .order_by(Invoice.bill_date).all()
         self.assertEquals(pa.return_account_balance(date_cursor=invoices[3].bill_date), 1200)
-
+        
+    """
+     Will fail as given due to the payment being made on the bill date of the second invoice,
+     which is past the cancellation pending date of the first invoice, therefor the payment would
+     have to be made by an Agent or on a later date to pass the test.
+    """
     def test_quarterly_on_second_installment_bill_date_with_full_payment(self):
         self.policy.billing_schedule = "Quarterly"
         pa = PolicyAccounting(self.policy.id)
@@ -113,3 +133,16 @@ class TestReturnAccountBalance(unittest.TestCase):
         self.payments.append(pa.make_payment(contact_id=self.policy.named_insured,
                                              date_cursor=invoices[1].bill_date, amount=600))
         self.assertEquals(pa.return_account_balance(date_cursor=invoices[1].bill_date), 0)
+
+    """
+     Added to test problem 7 restriction of Agent-only payments past the cancellation-pending date.
+    """
+    def test_non_agent_payment_on_annual_with_cancellation_pending(self):
+        self.policy.billing_schedule = "Annual"
+        pa = PolicyAccounting(self.policy.id)
+        invoice = pa.policy.invoices[0]
+        p = pa.make_payment(contact_id=self.policy.named_insured,
+                            date_cursor=invoice.due_date+relativedelta(days=21), amount=100)
+        
+        self.assertFalse(p)
+    

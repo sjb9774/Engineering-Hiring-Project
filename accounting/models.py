@@ -23,6 +23,7 @@ class Policy(db.Model):
         self.effective_date = effective_date
         self.annual_premium = annual_premium
 
+
     invoices = db.relation('Invoice', primaryjoin="Invoice.policy_id==Policy.id")
 
 

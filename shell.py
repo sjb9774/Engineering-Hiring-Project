@@ -9,6 +9,6 @@ try:
     embed()
 except ImportError:
     import os
-    import readline
+    #import readline
     from pprint import pprint
     os.environ['PYTHONINSPECT'] = 'True'
