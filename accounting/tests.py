@@ -13,7 +13,6 @@ from tools import PolicyAccounting
 Test Suite for PolicyAccounting
 #######################################################
 """
-
 class TestBillingSchedules(unittest.TestCase):
 
     @classmethod
@@ -24,7 +23,7 @@ class TestBillingSchedules(unittest.TestCase):
         db.session.add(cls.test_insured)
         db.session.commit()
 
-        cls.policy = Policy('Test Policy', date(2015, 1, 1), 1200)
+        cls.policy = Policy('Test Policy', date(2015, 1, 1), 1300)
         db.session.add(cls.policy)
         cls.policy.named_insured = cls.test_insured.id
         cls.policy.agent = cls.test_agent.id

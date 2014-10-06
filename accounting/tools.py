@@ -7,6 +7,7 @@ from accounting import db
 from models import Contact, Invoice, Payment, Policy, CanceledPolicy
 
 
+
 """
 #######################################################
 This is the base code for the intern project.
@@ -156,7 +157,6 @@ class PolicyAccounting(object):
      each will charge 1/4th the annual_premium, etc. Adds these invoices to the database.
     """
     def make_invoices(self):
-
          # Assuming that we don't care about change since database amount_due column is INTEGER type
 
         billing_schedules = {'Annual': 1, 'Two-Pay': 2, 'Semi-Annual': 3,
@@ -188,6 +188,10 @@ class PolicyAccounting(object):
                               self.policy.annual_premium / billing_schedules.get(self.policy.billing_schedule))
             invoices.append(invoice)
 
+        """
+         If a bad billing_schedule is chosen then we will add a single invoice as if the policy
+         had an Annual billing_schedule? This is probably not good.
+        """
         for invoice in invoices:
             db.session.add(invoice)
         db.session.commit()
