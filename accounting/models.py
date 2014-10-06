@@ -3,6 +3,7 @@ from accounting import db
 # 
 # DeclarativeBase = declarative_base()
 
+
 class Policy(db.Model):
     __tablename__ = 'policies'
 
@@ -13,7 +14,8 @@ class Policy(db.Model):
     policy_number = db.Column(u'policy_number', db.VARCHAR(length=128), nullable=False)
     effective_date = db.Column(u'effective_date', db.DATE(), nullable=False)
     status = db.Column(u'status', db.Enum(u'Active', u'Canceled', u'Expired'), default=u'Active', nullable=False)
-    billing_schedule = db.Column(u'billing_schedule', db.Enum(u'Annual', u'Two-Pay', u'Quarterly', u'Monthly'), default=u'Annual', nullable=False)
+    billing_schedule = db.Column(u'billing_schedule', db.Enum(u'Annual', u'Two-Pay', u'Quarterly', u'Monthly'),
+                                 default=u'Annual', nullable=False)
     annual_premium = db.Column(u'annual_premium', db.INTEGER(), nullable=False)
     named_insured = db.Column(u'named_insured', db.INTEGER(), db.ForeignKey('contacts.id'))
     agent = db.Column(u'agent', db.INTEGER(), db.ForeignKey('contacts.id'))
@@ -24,6 +26,7 @@ class Policy(db.Model):
         self.annual_premium = annual_premium
 
     invoices = db.relation('Invoice', primaryjoin="Invoice.policy_id==Policy.id")
+    payments = db.relation('Payment', primaryjoin="Payment.policy_id==Policy.id")
 
 
 class Contact(db.Model):
@@ -62,6 +65,27 @@ class Invoice(db.Model):
         self.cancel_date = cancel_date
         self.amount_due = amount_due
 
+
+'''
+ This new table will hold the cancellation information for a policy that has been
+ canceled. Retains a reference to the policy in the Policy table that was cancelled
+ to avoid holding redundant information or having to move rows between tables.
+'''
+class CanceledPolicy(db.Model):
+    __tablename__ = 'canceled_policy'
+
+    __table_args__ = {}
+
+    
+    id = db.Column( u'id', db.INTEGER(), primary_key=True, nullable=False )
+    policy_id = db.Column( u'policy_id', db.INTEGER(), db.ForeignKey('policies.id'), nullable=False)
+    cancellation_date = db.Column( u'cancellation_date', db.DATE(), nullable=False )
+    details = db.Column( u'details', db.VARCHAR(length=256), nullable=False )
+
+    def __init__(self, policy_id, cancellation_date, details=None):
+        self.policy_id = policy_id
+        self.cancellation_date = cancellation_date
+        self.details = details
 
 class Payment(db.Model):
     __tablename__ = 'payments'

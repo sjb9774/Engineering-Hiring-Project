@@ -1,15 +1,26 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Some sort of title?</title>
-  <meta name="description" content="What is this?">
-  <meta name="author" content="Who?">
-  <!--[if lt IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-</head>
-<body>
-    <p>Your server is working.</p>
-</body>
-</html>
+<!-- template for home page, presents a form for inputting a policy number and date -->
+
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>IWS Applicant Welcomes You!</title>
+  <meta name="description" content="Main page for entering client information">
+  <meta name="author" content="Stephen Biston">
+{% endblock %}
+{% block content %}
+	<div class="floating_section">
+		<h1>Hello!</h1>
+		<h2>The IWS Applicant Project welcomes you</h2>
+	</div>
+
+	<div class="floating_section">
+		<form action="/policyInfo" method="post">
+				<h3>Please enter your Policy Number</h3>
+				<input type="number" name="policy_number" placeholder="Policy Number"/>
+				<h3>And the date of the last invoice you'd like to see</h3>
+				<input name="invoice_date" type="text" placeholder="YYYY-MM-DD">
+				<input type="submit" value="Submit">
+		</form>
+	</div>
+{% endblock %}
+

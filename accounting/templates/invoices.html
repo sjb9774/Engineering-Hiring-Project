@@ -1,0 +1,26 @@
+<!-- template for displaying information about a policy's invoices and payments -->
+{% extends 'base.html' %}
+
+{% block head %}
+	<title>Invoices and Policy Information</title>
+	<meta name="description" content="Displays a users invoices.">
+	<meta name="author" content="Stephen Biston">
+{% endblock %}
+{% block content %}
+	<div class="floating_section">
+		<h1>Viewing {{ policy_account.policy.policy_number }}</h1>
+		<h2 class="{{policy_account.policy.status}}">{{policy_account.policy.status}}</h2>
+		<br/>
+		<h3>Schedule: {{policy_account.policy.billing_schedule}}</h3>
+		<h3>Effective date of policy: {{ policy_account.policy.effective_date }}</h3>
+		<h3>Balance: ${{policy_account.return_account_balance( invoice_date )}} as of {{ invoice_date }}.</h3>
+	</div>
+
+	<div class="floating_section">
+		{% include 'invoice_table.html' %}
+	</div>
+	
+	<div class="floating_section">
+		{% include 'payment_table.html' %}
+	</div>
+{% endblock %}

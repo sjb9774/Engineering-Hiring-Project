@@ -1,0 +1,20 @@
+<!-- portable sub-template for displaying payment information for a policy -->
+<h3>Payments for {{policy_account.policy.policy_number}}</h3>
+<table id="invoice_table">
+	<th>Contact</th>
+	<th>Amount Paid</th>
+	<th>Transaction Date</th>
+    {% if payments_contacts_dict %}
+	{% for payment in payments_contacts_dict %}
+	<tr>
+		<td>{{payments_contacts_dict[payment].name}}</td>
+		<td>${{payment.amount_paid}}</td>
+		<td>{{payment.transaction_date}}</td>
+	</tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="3">None</td>
+    </tr>
+    {% endif %}
+</table>

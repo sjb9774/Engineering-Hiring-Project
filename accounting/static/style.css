@@ -1,0 +1,146 @@
+/************************
+*	Tag-Selectors
+************************/
+body
+{
+	background-color: #FFFFFF;
+	color: #FFFFFF;
+	font-family: Tahoma, Geneva, sans-serif;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+}
+
+h1
+{
+	font-size: 48pt;
+	font-weight: normal;
+	margin: 0px;
+	padding: 5px;
+}
+
+h2
+{
+	font-weight: normal;
+	margin: 0px;
+	padding: 2px;
+}
+
+h3
+{
+	font-size: 14pt;
+	font-weight: normal;
+	margin: auto;
+}
+
+input
+{
+	border-style: none;
+	display: block;
+	margin: 5px auto;
+	padding: 5px;
+	width: 200px;
+}
+
+nav
+{
+	background-color: #a8d7b4;
+	padding: 5px 0px;
+	position: fixed;
+	text-align: left;
+	top: 0%;
+	width: 100%;
+}
+
+nav a
+{
+	color: #FFFFFF;
+	text-decoration: none;
+	margin: 10px;
+	padding: 5px;
+	background-color: #8fb599;
+}
+
+nav a:hover
+{
+	background-color: #a8d7b4;
+}
+
+th
+{
+	background-color: #a8d7b4;
+	font-size: 14pt;
+}
+
+tr, td
+{
+	border: 1px solid #d2f4db;
+}
+
+tr:hover
+{
+	background-color: #a8d7b4;
+}
+
+/************************
+*	Class-Selectors
+************************/
+
+.Active
+{
+	background-color: #9df299;
+	color: #659763;
+}
+
+.Canceled
+{
+	background-color: #f29d99;
+	color: #976563;
+}
+
+.deleted
+{
+	background-color: #f29d99;
+}
+
+.deleted:hover
+{
+	background-color: #976563;
+}
+
+.floating_section
+{
+	background-color: #8fb599;
+	margin: 3% auto;
+	padding: 20px;
+	width: 40%;
+	text-align: center;
+}
+
+/************************
+*	ID-Selectors
+************************/
+
+#error
+{
+	background-color: #CC0000;
+	margin: 0px;
+	padding: 10px 0px;
+	position: fixed;
+	text-align: center;
+	bottom: 0%;
+	width: 100%;
+}
+
+#home
+{
+	color: #a8d7b4;
+	margin: 20px;
+	text-decoration: none;
+}
+
+#invoice_table
+{
+	width: 100%;
+}

@@ -1,0 +1,22 @@
+<!-- portable sub-template for displaying payment information for a policy -->
+<h3>Invoices to date {{ invoice_date }}</h3>
+<table id="invoice_table">
+	<th>Bill Date</th>
+	<th>Due Date</th>
+	<th>Cancel Date</th>
+	<th>Amount due</th>
+	<th>Deleted?</th>
+	{% for invoice in invoices %}
+	{% if invoice.deleted %}
+	<tr class="deleted">
+	{% else %}
+	<tr>
+	{% endif %}
+		<td>{{invoice.bill_date}}</td>
+		<td>{{invoice.due_date}}</td>
+		<td>{{invoice.cancel_date}}</td>
+		<td>${{invoice.amount_due}}</td>
+		<td>{{invoice.deleted}}</td>
+	</tr>
+	{% endfor %}
+</table>
